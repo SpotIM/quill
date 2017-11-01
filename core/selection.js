@@ -157,7 +157,8 @@ class Selection {
   }
 
   getNativeRange() {
-    let selection = document.getSelection();
+    const rootDocument = (this.root.getRootNode ? this.root.getRootNode() : document);
+    let selection = rootDocument.getSelection();
     if (selection == null || selection.rangeCount <= 0) return null;
     let nativeRange = selection.getRangeAt(0);
     if (nativeRange == null) return null;
@@ -268,7 +269,8 @@ class Selection {
     if (startNode != null && (this.root.parentNode == null || startNode.parentNode == null || endNode.parentNode == null)) {
       return;
     }
-    let selection = document.getSelection();
+    const rootDocument = (this.root.getRootNode ? this.root.getRootNode() : document);
+    let selection = rootDocument.getSelection();
     if (selection == null) return;
     if (startNode != null) {
       if (!this.hasFocus()) this.root.focus();
