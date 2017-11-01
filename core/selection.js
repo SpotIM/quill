@@ -114,13 +114,14 @@ class Selection {
   }
 
   getBounds(index, length = 0) {
+    const rootDocument = (this.root.getRootNode ? this.root.getRootNode() : document);
     let scrollLength = this.scroll.length();
     index = Math.min(index, scrollLength - 1);
     length = Math.min(index + length, scrollLength - 1) - index;
     let node, [leaf, offset] = this.scroll.leaf(index);
     if (leaf == null) return null;
     [node, offset] = leaf.position(offset, true);
-    let range = document.createRange();
+    let range = rootDocument.createRange();
     if (length > 0) {
       range.setStart(node, offset);
       [leaf, offset] = this.scroll.leaf(index + length);
@@ -289,7 +290,7 @@ class Selection {
           endOffset = [].indexOf.call(endNode.parentNode.childNodes, endNode);
           endNode = endNode.parentNode;
         }
-        let range = document.createRange();
+        let range = rootDocument.createRange();
         range.setStart(startNode, startOffset);
         range.setEnd(endNode, endOffset);
         selection.removeAllRanges();
