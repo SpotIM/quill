@@ -30,7 +30,8 @@ class Emitter extends EventEmitter {
 
   handleDOM(event, ...args) {
     (this.listeners[event.type] || []).forEach(function({ node, handler }) {
-      if (event.target === node || node.contains(event.target)) {
+      const target = (event.composedPath ? event.composedPath()[0] : event.target);
+      if (target === node || node.contains(target)) {
         handler(event, ...args);
       }
     });
