@@ -4,15 +4,13 @@ import logger from './logger';
 let debug = logger('quill:events');
 
 const EVENTS = ['selectionchange', 'mousedown', 'mouseup', 'click'];
+const EMITTERS = new Set();
 
 EVENTS.forEach(function(eventName) {
   document.addEventListener(eventName, (...args) => {
-    [].slice.call(document.querySelectorAll('.ql-container')).forEach((node) => {
-      // TODO use WeakMap
-      if (node.__quill && node.__quill.emitter) {
-        node.__quill.emitter.handleDOM(...args);
-      }
-    });
+    for (let em of EMITTERS) {
+      em.handleDOM(...args);
+    }
   });
 });
 
@@ -22,6 +20,7 @@ class Emitter extends EventEmitter {
     super();
     this.listeners = {};
     this.on('error', debug.error);
+    EMITTERS.add(em);
   }
 
   emit() {
