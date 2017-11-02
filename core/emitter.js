@@ -19,8 +19,8 @@ class Emitter extends EventEmitter {
   constructor() {
     super();
     this.listeners = {};
-    this.on('error', debug.error);
     EMITTERS.add(em);
+    this.on('error', debug.error);
   }
 
   emit() {

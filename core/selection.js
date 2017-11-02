@@ -22,6 +22,7 @@ class Selection {
     this.composing = false;
     this.mouseDown = false;
     this.root = this.scroll.domNode;
+    this.rootDocument = (this.root.getRootNode ? this.root.getRootNode() : document);
     this.cursor = Parchment.create('cursor', this);
     // savedRange is last non-null range
     this.lastRange = this.savedRange = new Range(0, 0);
@@ -114,14 +115,13 @@ class Selection {
   }
 
   getBounds(index, length = 0) {
-    const rootDocument = (this.root.getRootNode ? this.root.getRootNode() : document);
     let scrollLength = this.scroll.length();
     index = Math.min(index, scrollLength - 1);
     length = Math.min(index + length, scrollLength - 1) - index;
     let node, [leaf, offset] = this.scroll.leaf(index);
     if (leaf == null) return null;
     [node, offset] = leaf.position(offset, true);
-    let range = rootDocument.createRange();
+    let range = document.createRange();
     if (length > 0) {
       range.setStart(node, offset);
       [leaf, offset] = this.scroll.leaf(index + length);
@@ -158,8 +158,7 @@ class Selection {
   }
 
   getNativeRange() {
-    const rootDocument = (this.root.getRootNode ? this.root.getRootNode() : document);
-    let selection = rootDocument.getSelection();
+    let selection = this.rootDocument.getSelection();
     if (selection == null || selection.rangeCount <= 0) return null;
     let nativeRange = selection.getRangeAt(0);
     if (nativeRange == null) return null;
@@ -270,8 +269,7 @@ class Selection {
     if (startNode != null && (this.root.parentNode == null || startNode.parentNode == null || endNode.parentNode == null)) {
       return;
     }
-    const rootDocument = (this.root.getRootNode ? this.root.getRootNode() : document);
-    let selection = rootDocument.getSelection();
+    let selection = this.rootDocument.getSelection();
     if (selection == null) return;
     if (startNode != null) {
       if (!this.hasFocus()) this.root.focus();
@@ -290,7 +288,7 @@ class Selection {
           endOffset = [].indexOf.call(endNode.parentNode.childNodes, endNode);
           endNode = endNode.parentNode;
         }
-        let range = rootDocument.createRange();
+        let range = document.createRange();
         range.setStart(startNode, startOffset);
         range.setEnd(endNode, endOffset);
         selection.removeAllRanges();
