@@ -19,7 +19,7 @@ class Emitter extends EventEmitter {
   constructor() {
     super();
     this.listeners = {};
-    EMITTERS.add(em);
+    EMITTERS.add(this);
     this.on('error', debug.error);
   }
 
@@ -29,8 +29,9 @@ class Emitter extends EventEmitter {
   }
 
   handleDOM(event, ...args) {
+    const target = (event.composedPath ? event.composedPath()[0] : event.target);
+
     (this.listeners[event.type] || []).forEach(function({ node, handler }) {
-      const target = (event.composedPath ? event.composedPath()[0] : event.target);
       if (target === node || node.contains(target)) {
         handler(event, ...args);
       }

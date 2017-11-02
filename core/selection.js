@@ -28,7 +28,7 @@ class Selection {
     this.lastRange = this.savedRange = new Range(0, 0);
     this.handleComposition();
     this.handleDragging();
-    this.emitter.listenDOM('selectionchange', document, () => {
+    this.emitter.listenDOM('selectionchange', this.rootDocument, () => {
       if (!this.mouseDown) {
         setTimeout(this.update.bind(this, Emitter.sources.USER), 1);
       }
@@ -76,10 +76,12 @@ class Selection {
   }
 
   handleDragging() {
-    this.emitter.listenDOM('mousedown', document.body, () => {
+    const node = (this.rootDocument === document ? document.body : this.rootNode);
+
+    this.emitter.listenDOM('mousedown', node, () => {
       this.mouseDown = true;
     });
-    this.emitter.listenDOM('mouseup', document.body, () => {
+    this.emitter.listenDOM('mouseup', node, () => {
       this.mouseDown = false;
       this.update(Emitter.sources.USER);
     });
@@ -175,7 +177,7 @@ class Selection {
   }
 
   hasFocus() {
-    return document.activeElement === this.root;
+    return this.rootDocument.activeElement === this.root;
   }
 
   normalizedToRange(range) {
