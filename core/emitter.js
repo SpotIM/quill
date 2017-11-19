@@ -4,13 +4,13 @@ import logger from './logger';
 let debug = logger('quill:events');
 
 const EVENTS = ['selectionchange', 'mousedown', 'mouseup', 'click'];
-const EMITTERS = new Set();
+const EMITTERS = [];
 
 EVENTS.forEach(function(eventName) {
   document.addEventListener(eventName, (...args) => {
-    for (let em of EMITTERS) {
+    EMITTERS.forEach((em) => {
       em.handleDOM(...args);
-    }
+    });
   });
 });
 
@@ -19,7 +19,7 @@ class Emitter extends EventEmitter {
   constructor() {
     super();
     this.listeners = {};
-    EMITTERS.add(this);
+    EMITTERS.push(this);
     this.on('error', debug.error);
   }
 
