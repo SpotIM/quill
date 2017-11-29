@@ -76,12 +76,10 @@ class Selection {
   }
 
   handleDragging() {
-    const node = (this.rootDocument === document ? document.body : this.rootNode);
-
-    this.emitter.listenDOM('mousedown', node, () => {
+    this.emitter.listenDOM('mousedown', document.body, () => {
       this.mouseDown = true;
     });
-    this.emitter.listenDOM('mouseup', node, () => {
+    this.emitter.listenDOM('mouseup', document.body, () => {
       this.mouseDown = false;
       this.update(Emitter.sources.USER);
     });
