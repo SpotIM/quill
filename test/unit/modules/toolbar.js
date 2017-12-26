@@ -98,6 +98,11 @@ describe('Toolbar', function() {
   });
 
   describe('shadow dom', function() {
+    // Some browsers don't support shadow DOM
+    if (!document.head.attachShadow) {
+      return;
+    }
+
     let container;
     let editor;
 

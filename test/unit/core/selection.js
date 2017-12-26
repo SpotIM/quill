@@ -38,6 +38,11 @@ describe('Selection', function() {
   });
 
   describe('shadow root', function() {
+    // Some browsers don't support shadow DOM
+    if (!document.head.attachShadow) {
+      return;
+    }
+
     let container;
     let root;
 
