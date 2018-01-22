@@ -5,6 +5,7 @@ let debug = logger('quill:events');
 
 const EVENTS = ['selectionchange', 'mousedown', 'mouseup', 'click'];
 const EMITTERS = [];
+const supportsRootNode = ('getRootNode' in document);
 
 EVENTS.forEach(function(eventName) {
   document.addEventListener(eventName, (...args) => {
@@ -30,9 +31,24 @@ class Emitter extends EventEmitter {
 
   handleDOM(event, ...args) {
     const target = (event.composedPath ? event.composedPath()[0] : event.target);
+    const containsNode = (node, target) => {
+      if (!supportsRootNode || target.getRootNode() === document) {
+        return node.contains(target);
+      }
+
+      while (!node.contains(target)) {
+        const root = target.getRootNode();
+        if (!root || !root.host) {
+          return false;
+        }
+        target = root.host;
+      }
+
+      return true;
+    };
 
     (this.listeners[event.type] || []).forEach(function({ node, handler }) {
-      if (target === node || node.contains(target)) {
+      if (target === node || containsNode(node, target)) {
         handler(event, ...args);
       }
     });
