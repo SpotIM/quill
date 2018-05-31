@@ -5,23 +5,27 @@ let debug = logger('quill:events');
 
 const EVENTS = ['selectionchange', 'mousedown', 'mouseup', 'click'];
 
-EVENTS.forEach(function(eventName) {
-  document.addEventListener(eventName, (...args) => {
-    [].slice.call(document.querySelectorAll('.ql-container')).forEach((node) => {
-      // TODO use WeakMap
-      if (node.__quill && node.__quill.emitter) {
-        node.__quill.emitter.handleDOM(...args);
+function registerDOMListeners (dom) {
+  EVENTS.forEach(function(eventName) {
+    dom.addEventListener(eventName, (...args) => {
+      if (dom.__quill && dom.__quill.emitter) {
+        dom.__quill.emitter.handleDOM(...args);
       }
     });
   });
-});
+}
 
 
 class Emitter extends EventEmitter {
-  constructor() {
+  constructor(dom = null) {
     super();
     this.listeners = {};
     this.on('error', debug.error);
+    this.dom = dom
+
+    if (this.dom) {
+      registerDOMListeners(this.dom)
+    }
   }
 
   emit() {

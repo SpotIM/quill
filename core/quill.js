@@ -73,7 +73,7 @@ class Quill {
     this.root.classList.add('ql-blank');
     this.root.setAttribute('data-gramm', false);
     this.scrollingContainer = this.options.scrollingContainer || this.root;
-    this.emitter = new Emitter();
+    this.emitter = new Emitter(this.container);
     this.scroll = Parchment.create(this.root, {
       emitter: this.emitter,
       whitelist: this.options.formats

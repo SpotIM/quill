@@ -107,7 +107,7 @@ function initialize(klass, html, container = this.container) {
   }
   if (klass === HTMLElement) return container;
   if (klass === Quill) return new Quill(container);
-  let emitter = new Emitter();
+  let emitter = new Emitter(container);
   let scroll = new Scroll(container, { emitter: emitter });
   if (klass === Scroll) return scroll;
   if (klass === Editor) return new Editor(scroll);

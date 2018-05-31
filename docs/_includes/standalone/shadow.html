@@ -1,0 +1,59 @@
+<!-- head -->
+
+
+<!-- head -->
+<template id="shadow-contents">
+  <link rel="stylesheet" href="{{site.katex}}/katex.min.css">
+  <link rel="stylesheet" href="{{site.highlightjs}}/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="{{site.cdn}}{{site.version}}/quill.snow.css">
+  <style>
+    .standalone-container {
+      margin: 50px auto;
+      max-width: 720px;
+    }
+    #snow-container {
+      height: 350px;
+    }
+  </style>
+  <div class="standalone-container">
+    <div id="snow-container"></div>
+  </div>
+</template>
+<p>I'm a text thing that's outside</p>
+<quill-editor></quill-editor>
+
+<!-- script -->
+<script src="{{site.katex}}/katex.min.js"></script>
+<script src="{{site.highlightjs}}/highlight.min.js"></script>
+<script src="{{site.cdn}}{{site.version}}/{{site.quill}}"></script>
+<script>
+  let shadowContents = document.getElementById('shadow-contents').innerHTML
+
+  class Editor extends HTMLElement {
+    constructor () {
+      super()
+      this.wrapper = this.createInnerDocument()
+      this.quill = this.createEditor()
+    }
+
+    createInnerDocument () {
+      let shadow = this.attachShadow({ mode: 'open' })
+      let shadowContainer = document.createElement('div')
+      shadowContainer.innerHTML = shadowContents
+      shadow.appendChild(shadowContainer)
+      return shadowContainer
+    }
+
+    createEditor () {
+      let container = this.wrapper.querySelector('#snow-container')
+      return new Quill(container, {
+        placeholder: 'Compose an epic...',
+        theme: 'snow'
+      })
+    }
+  }
+
+  window.customElements.define('quill-editor', Editor)
+
+</script>
+<!-- script -->
