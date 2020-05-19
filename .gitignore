@@ -3,6 +3,6 @@
 /selenium
 /docs/_site
 /src
+/dist
 *.d.ts
 *.log
-

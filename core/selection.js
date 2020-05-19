@@ -85,10 +85,10 @@ class Selection {
     });
   }
 
-  focus() {
+  focus(preventScroll = false) {
     if (this.hasFocus()) return;
-    this.root.focus();
-    this.setRange(this.savedRange);
+    this.root.focus({ preventScroll });
+    this.setRange(this.savedRange)
   }
 
   format(format, value) {
