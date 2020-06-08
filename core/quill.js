@@ -85,6 +85,18 @@ class Quill {
     this.clipboard = this.theme.addModule('clipboard');
     this.history = this.theme.addModule('history');
     this.theme.init();
+
+    /*
+    * this fixes an issue with Safari, where deleting after the contenteditable area is empty
+    * causes weird behavior
+    * */
+    this.emitter.dom.addEventListener("keydown", e => {
+      const key = e.keyCode || e.charCode;
+      if (key === 8 && this.editor.isBlank()) {
+        e.preventDefault();
+      }
+    });
+
     this.emitter.on(Emitter.events.EDITOR_CHANGE, (type) => {
       if (type === Emitter.events.TEXT_CHANGE) {
         this.root.classList.toggle('ql-blank', this.editor.isBlank());
