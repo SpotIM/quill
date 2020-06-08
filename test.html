@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quill test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
+    <script src="http://localhost:9080/quill.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.quilljs.com/1.3.6/quill.bubble.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+    />
+  </head>
+  <body>
+    <h1>Editor below</h1>
+
+    <div id="quillShadowContainer"></div>
+
+    <style>
+      #editor-container {
+        height: 375px;
+      }
+    </style>
+    <script>
+      const container = document.querySelector("#quillShadowContainer");
+      const quillHost = document.createElement("div");
+
+      if (true) {
+        container.attachShadow({ mode: "open" });
+        container.shadowRoot.appendChild(quillHost);
+        const linkElements = document.querySelectorAll("link");
+        Array.from(linkElements).forEach(element => {
+          container.shadowRoot.appendChild(element.cloneNode());
+        });
+      } else {
+        document.body.appendChild(quillHost);
+      }
+
+      const quill = new Quill(quillHost, {
+        modules: {
+          toolbar: [
+            [{ header: [1, 2, false] }],
+            ["bold", "italic", "underline"],
+            ["image", "code-block"]
+          ]
+        },
+        placeholder: "Compose an epic...",
+        theme: "snow" // or 'bubble'
+      });
+    </script>
+  </body>
+</html>
