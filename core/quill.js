@@ -90,7 +90,7 @@ class Quill {
     * this fixes an issue with Safari, where deleting after the contenteditable area is empty
     * causes weird behavior
     * */
-    this.emitter.dom.addEventListener("keydown", e => {
+    this.emitter.dom.addEventListener("keydown", (e) => {
       const key = e.keyCode || e.charCode;
       if (key === 8 && this.editor.isBlank()) {
         e.preventDefault();
