@@ -1,6 +1,6 @@
 {
   "name": "@spotim/quill",
-  "version": "1.4.0",
+  "version": "1.4.2",
   "description": "Your powerful, rich text editor | modified with Shadow DOM support, by https://github.com/elmdash/quill",
   "author": "Jason Chen <jhchen7@gmail.com>",
   "homepage": "http://quilljs.com",
@@ -32,11 +32,11 @@
     }
   },
   "dependencies": {
+    "@spotim/parchment": "^1.1.5",
     "clone": "^2.1.1",
     "deep-equal": "^1.0.1",
     "eventemitter3": "^2.0.3",
     "extend": "^3.0.1",
-    "parchment": "^1.1.4",
     "quill-delta": "^3.6.2"
   },
   "devDependencies": {
@@ -80,6 +80,7 @@
   },
   "scripts": {
     "build": "webpack --config _develop/webpack.config.js; rm dist/quill.core dist/quill.bubble dist/quill.snow;",
+    "prepare": "yarn run build",
     "build:release": "./_develop/scripts/release.sh",
     "start": "npm run build; bundle exec foreman start -f _develop/procfile",
     "test": "npm run test:unit",

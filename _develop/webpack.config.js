@@ -50,7 +50,7 @@ module.exports = function(env) {
     },
     resolve: {
       alias: {
-        'parchment': path.resolve(__dirname, '../node_modules/parchment/src/parchment')
+        'parchment': path.resolve(__dirname, '../node_modules/@spotim/parchment/src/parchment')
       },
       extensions: ['.js', '.styl', '.ts']
     },
