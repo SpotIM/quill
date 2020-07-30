@@ -3,6 +3,7 @@ import clone from 'clone';
 import equal from 'deep-equal';
 import Emitter from './emitter';
 import logger from './logger';
+import * as shadowPolyfill from './shadowPolyfill';
 
 let debug = logger('quill:selection');
 
@@ -168,6 +169,10 @@ class Selection {
           return ctx
         }
 
+        if (typeof ctx.getSelection === "undefined") {
+          this.noSelectionShadowRootInstance = ctx;
+        }
+
         return document
       }
     }
@@ -176,6 +181,11 @@ class Selection {
   }
 
   getNativeRange() {
+    if (this.noSelectionShadowRootInstance) {
+      let nativeRange = shadowPolyfill.getRange(this.noSelectionShadowRootInstance);
+      return nativeRange ? this.normalizeNative(nativeRange) : null;
+    }
+
     let selection = this.domRoot.getSelection();
     if (selection == null || selection.rangeCount <= 0) return null;
     let nativeRange = selection.getRangeAt(0);
