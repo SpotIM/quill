@@ -280,7 +280,6 @@ export function getRange(root) {
 }
 
 function internalGetShadowSelection(root) {
-  console.log("in native");
   // nb. We used to check whether the selection contained the host, but this broke in Safari 13.
   // This is "nicely formatted" whitespace as per the browser's renderer. This is fine, and we only
   // provide selection information at this granularity.
