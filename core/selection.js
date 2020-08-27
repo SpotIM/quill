@@ -39,7 +39,8 @@ class Selection {
       }
     });
     this.emitter.on(Emitter.events.SCROLL_BEFORE_UPDATE, () => {
-      if (!this.hasFocus()) return;
+      // FireFox Fix for vertical text behavior: https://spotim-jira.atlassian.net/browse/FEED-1010
+      if (!this.hasFocus() && !/Firefox/i.test(navigator.userAgent)) return;
       let native = this.getNativeRange();
       if (native == null) return;
       if (native.start.node === this.cursor.textNode) return;  // cursor.restore() will handle
@@ -167,7 +168,7 @@ class Selection {
         if (typeof ctx.getSelection === 'function') {
           return ctx
         }
-        
+
         // don't use polyfill workaround for safari with shadow-dom when direction = rtl
         if (typeof ctx.getSelection === "undefined" && !this.root.parentNode.classList.contains('rtl')) {
           this.noSelectionShadowRootInstance = ctx;
